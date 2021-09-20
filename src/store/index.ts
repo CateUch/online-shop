@@ -1,6 +1,3 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { v1 } from 'uuid';
-
 
 export type ShopStateType = typeof initialShopState;
 
@@ -32,34 +29,5 @@ export const initialShopState = [
     }
 ]
 
-// const productsSlice = createSlice({
-//     name: 'products',
-//     initialState: initialShopState,
-//     reducers: {
-
-//     }
-// });
-
-// const store = configureStore({
-//     reducer: {
-//         products: productsSlice.reducer,
-//         cart: cartSlice.reducer
-//     }
-// });
-
-// export const productActions = productsSlice.actions;
-
-// declare module 'react-redux' {
-//     interface DefaultRootState extends AppRootStateType { }
-// }
-
 export default initialShopState;
-
-
-
-//types
-// export type AppRootStateType = {
-//     products: ShopStateType;
-//     cart: initialCartStateType
-// }
 

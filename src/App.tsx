@@ -8,8 +8,7 @@ function App() {
   const showCart = useSelector(state => state.showCart)
   const cartExist = useSelector(state => state.cart.items)
 
-  //@ts-ignore
-  return   (
+    return   (
     <Layout>
       {/* conditional false && expression  gives an error */}
       {/* solution: Inline && Operators conditional, wrap in React  Fragment*/}

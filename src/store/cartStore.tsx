@@ -7,9 +7,11 @@ const initialState: initialStateType = {
     products: initialShopState,
     cart: {
         items: [],
-        totalQuantity: 0
+        totalQuantity: 0,
+        changed: false
     },
-    showCart: false
+    showCart: false,
+    notification: null
 };
 
 export const shopSlice = createSlice({
@@ -37,7 +39,8 @@ export const shopSlice = createSlice({
                         totalPrice: newItem.price,
                     })
             }
-            state.cart.totalQuantity++
+            state.cart.totalQuantity++;
+            state.cart.changed = true;
         },
         increment(state, action) {
             const existingCartItemIndex = state.cart.items.findIndex(
@@ -48,7 +51,8 @@ export const shopSlice = createSlice({
                 existingCartItem.quantity++;
                 existingCartItem.totalPrice = existingCartItem.totalPrice + existingCartItem.price;
             };
-            state.cart.totalQuantity++
+            state.cart.totalQuantity++;
+            state.cart.changed = true;
         },
         decrement(state, action) {
             const existingCartItemIndex = state.cart.items.findIndex(
@@ -60,7 +64,8 @@ export const shopSlice = createSlice({
             } else {
                 existingItem.quantity--;
             }
-            state.cart.totalQuantity--
+            state.cart.totalQuantity--;
+            state.cart.changed = true;
         },
         remove(state, action) {
             const existingCartItemIndex = state.cart.items.findIndex(
@@ -68,10 +73,18 @@ export const shopSlice = createSlice({
             );
             const existingItem = state.cart.items[existingCartItemIndex];
             state.cart.items = state.cart.items.filter(item => item.id !== action.payload);
-            state.cart.totalQuantity=state.cart.totalQuantity-existingItem.quantity
-        }
+            state.cart.totalQuantity = state.cart.totalQuantity - existingItem.quantity;
+            state.cart.changed = true;
+        },
+        showNotification(state, action) {
+            state.notification = {
+                status: action.payload.status,
+                title: action.payload.title,
+                message: action.payload.message,
+            };
+        },
     }
-})
+});
 
 const store = configureStore({
     reducer: shopSlice.reducer
@@ -81,38 +94,35 @@ export const cartActions = shopSlice.actions;
 
 declare module 'react-redux' {
     interface DefaultRootState extends initialStateType { }
-}
+};
 
 export default store;
 
 
 //types
-// export type ShopStateType = typeof initialState;
 
 export type initialStateType = {
     products: ShopStateType,
     cart: {
         items: CartItemType[],
-        totalQuantity: number
+        totalQuantity: number,
+        changed: boolean
     },
-    showCart: boolean
-}
+    showCart: boolean,
+    notification: {
+        status: string,
+        title: string,
+        message: string
+    } | null
+};
 
-
-type CartItemType = {
+export type CartItemType = {
     id: string,
     title: string,
     price: number,
     quantity: number,
     totalPrice: number,
 }
-type StateItemType = {
-    id: string,
-    title: string,
-    price: number,
-    description: string,
-}
-
 
 //@ts-ignore
 window.store = store;
