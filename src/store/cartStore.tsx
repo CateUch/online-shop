@@ -23,6 +23,10 @@ export const shopSlice = createSlice({
                 state.showCart = !state.showCart
             }
         },
+        replaceCartData(state, action) {
+            state.cart.items = action.payload.items
+            state.cart.totalQuantity = action.payload.totalQuantity
+        },
         addItemToCart(state, action) {
             const newItem = action.payload;
             const existingItem = state.cart.items.find(item => item.id === newItem.id);

@@ -1,22 +1,52 @@
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchCartData, sendCartData } from './store/cart-actions';
+import Notification from './components/UI/Notification';
+
+
+let isInitial = true;
 
 function App() {
+  const dispatch = useDispatch();
+  const showCart = useSelector(state => state.showCart);
+  const cartExist = useSelector(state => state.cart.items);
+  const cart = useSelector(state => state.cart);
+  const notification = useSelector(state => state.notification)
 
-  const showCart = useSelector(state => state.showCart)
-  const cartExist = useSelector(state => state.cart.items)
+  useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
 
-    return   (
-    <Layout>
-      {/* conditional false && expression  gives an error */}
-      {/* solution: Inline && Operators conditional, wrap in React  Fragment*/}
-      <>
-     { (showCart && cartExist.length > 0) && <Cart /> }
-     </>
-      <Products />
-    </Layout>
+  useEffect(() => {
+    if (isInitial) {
+      isInitial = false;
+      return;
+    }
+
+    if (cart.changed) {
+      dispatch(sendCartData(cart));
+    }
+  }, [cart, dispatch]);
+
+  return (
+    <>
+      {notification && (
+        <Notification status={notification.status}
+          title={notification.title}
+          message={notification.message} />
+      )}
+      <Layout>
+        {/* conditional false && expression  gives an error */}
+        {/* solution: Inline && Operators conditional, wrap in React  Fragment*/}
+        <>
+          {(showCart && cartExist.length > 0) && <Cart />}
+        </>
+        <Products />
+      </Layout>
+    </>
   );
 
 }
