@@ -22,7 +22,7 @@ const dispatch = useDispatch()
 
 
   return (
-    <li className={style.item}>
+    <li className={style.item}>s
       <header>
         <h3>{title}</h3>
         <div className={style.price}>

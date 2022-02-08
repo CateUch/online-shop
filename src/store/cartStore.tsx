@@ -1,5 +1,4 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { v1 } from 'uuid';
 import initialShopState, { ShopStateType } from '.';
 
 
